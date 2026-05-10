@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*$py.class
+*.venv/
+.venv/
+venv/
+ENV/
+env/
+*.env
+.env
+
+# Docker
+docker-compose.override.yml
+docker-compose.*.yml
+**/Dockerfile.*
+**/docker-compose*.yml
+*.log
+
+# Ollama and model data
+transcript_to_summary/ollama-data/*
+!transcript_to_summary/ollama-data/.gitkeep
+*.sqlite
+*.db
+
+# Whisper model data
+audio_to_transcript/whisper-data/*
+!audio_to_transcript/whisper-data/.gitkeep
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+# Service outputs (but keep .gitkeep for directory structure)
+bbb_to_audio/output/*
+!bbb_to_audio/output/.gitkeep
+audio_to_transcript/output/*
+!audio_to_transcript/output/.gitkeep
+transcript_to_summary/output/*
+!transcript_to_summary/output/.gitkeep
+
+# IDE and editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# System files
+.DS_Store
+Thumbs.db
