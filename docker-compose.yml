@@ -1,0 +1,48 @@
+services:
+  bbb-to-audio:
+    image: docker.io/hawkmooneternal/bbb-to-audio
+    container_name: bbb-to-audio
+    build:
+      context: ./bbb_to_audio
+    volumes:
+      - ./bbb_to_audio/output:/output
+    ports:
+      - 9000:8000
+
+  audio-to-transcript:
+    image: docker.io/hawkmooneternal/audio-to-transcript:latest
+    container_name: audio-to-transcript
+    build:
+      context: ./audio_to_transcript
+    ports:
+      - "9001:8000"
+    volumes:
+      - ./bbb_to_audio/output:/input
+      - ./audio_to_transcript/output:/output
+      - ./audio_to_transcript/whisper-data:/app/cache/whisper
+    depends_on:
+      - bbb-to-audio
+
+  transcript-to-summary:
+    image: docker.io/hawkmooneternal/transcript-to-summary
+    container_name: transcript-to-summary
+    build:
+      context: ./transcript_to_summary
+    ports:
+      - "9002:8000"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    volumes:
+      - ./audio_to_transcript/output:/input
+      - ./transcript_to_summary/output:/output
+    depends_on:
+      - ollama
+      - audio-to-transcript
+
+  ollama:
+    image: docker.io/ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./transcript_to_summary/ollama-data:/root/.ollama
